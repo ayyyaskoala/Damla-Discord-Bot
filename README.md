@@ -14,7 +14,7 @@ Commands:
   
   Delete: Just deleting message from the chat where sended...
   
-  Random: If you are connected to a room and not alone, it will create with random choise 2 Teams.
+  Random: If you are connected to a room and not alone, it will create 2 Teams with random choise.
  
   CFG: I've saved my CS:GO cfg file here.
   
@@ -26,7 +26,7 @@ onMessageEvents:
 
   -Chating with Damla, she will takes the question 'how are u' really seriously.
   
-  -She doesn'y like profanities.
+  -She doesn't like swears, but she will use if she needs.
   
   -In our Discord Server you have to write your music wishes in a spesific Text-Channel or you will become 'the fucker of the week'.
   
