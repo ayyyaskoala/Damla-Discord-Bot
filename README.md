@@ -14,7 +14,7 @@ Commands:
   
   Delete: Just deleting message from the chat where sended...
   
-  Random: If you are connected to a room and not alone, it will create random 2 Teams.
+  Random: If you are connected to a room and not alone, it will create with random users 2 Teams.
  
   CFG: I've saved my CS:GO cfg file here.
   
