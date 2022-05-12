@@ -1,4 +1,3 @@
-from tkinter import Variable
 import discord, requests,json, random ,sqlite3
 from discord.ext import commands
  
@@ -85,7 +84,7 @@ def nasilsin_veri_cek():
   cursor.execute('SELECT * FROM nasilsin')
   data = cursor.fetchall()
   return data
-#------Borsalar-*-----------
+#------Borsalar-*----------- this doesn't work anymore :/
 def borsa():
   class crypto():
     def __init__(self,symbol,volume,high,low,bid):
