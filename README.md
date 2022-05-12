@@ -1,7 +1,7 @@
 # Damla Discord Bot
 This is my private Discord Bot
 
-There are differend ways to create a Discord Bot. In the way I did you can use Commands with Events together and they work fine. I'm hosting this script in Replit. Damla was written in Turkish, so I had to change the basics. I have tried to make it understandable and left the rest as it is.
+There are differend ways to create a Discord Bot. In the way I did you can use commands with events together and they work fine. I'm hosting this script in Replit. Damla was written in Turkish, so I had to change the basics. I have tried to make it understandable and left the rest as it is.
 
 Before I explain Damla, I've to say it's for fun and there is nothing serious. Damla is a hoe and whether she exists we will never know. The base idea of this Bot was to save gained Damlas, but she growed up :D
 
@@ -14,7 +14,7 @@ Commands:
   
   Delete: Just deleting message from the chat where sended...
   
-  Random: If you are connected to a room and not alone, it will create with random users 2 Teams.
+  Random: If you are connected to a room and not alone, it will create with random choise 2 Teams.
  
   CFG: I've saved my CS:GO cfg file here.
   
