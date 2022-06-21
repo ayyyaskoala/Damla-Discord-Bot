@@ -1,8 +1,9 @@
 from discord.ext import commands
 from discord.channel import TextChannel,DMChannel
-import discord, asyncio
-import random as rd
 
+import discord, asyncio, random as rd , sqlite3 as sql
+from datetime import date
+ 
 from app.func import *
 
 
@@ -13,24 +14,26 @@ class onReady(commands.Cog,name="onReady"):
     @commands.Cog.listener()
     async def on_ready(self):
         print("U're online. Welcome {0.user}".format(self.client))
-        await self.client.change_presence(status=discord.Status.idle,activity=discord.Game('With her no Existing dick'))
+        await self.client.change_presence(status=discord.Status.idle,activity=discord.Game('Tra ta tatata'))
         
         global dwarfs_server_object
-        global role_of_bots
+        global MemberInRoom 
 
-        dwarfs_server_object = discord.utils.get(self.client.guilds, id = 540000000000000655)      #Dwarf's World <- My Discord Server   
+        dwarfs_server_object = discord.utils.get(self.client.guilds, id = 548000000000000055)      #Dwarf's World my Channel :P             
+        MemberInRoom = {}
+        
         return
     
 class onMessageEvents(commands.Cog,name="onMessageEvents"):
     def __init__(self, client:commands.Bot):
         self.client = client    
         self.damla_nikname = ["damla", "damlacım", "damlacık", "damloş"]
-        self.kufur_icerik = ["fuck","bitch","hoe","amk", "aq", "amına", "sik", "siktir", "sikeyim"]
-        self.nasilsin_icerik = ["Whats up","nasılsın", "naber"]
-        self.merhabalar = ["hi","hello"]
-        self.ozlu_sozler = ["word of the day","özlü sözler","özlü söz", "günün sözü", "damla damlat bir söz"]
-        self.oyunlar = ["lol", "apex", "cs ", "cs go"]
-        self.sevgi = [" ...oyundan önce sakso?","de beni önce bi aşıla","ama önce meme saksosu?"]
+        self.blasphemous_content = ["fuck","bitch","hoe","amk", "aq", "amına", "sik", "siktir", "sikeyim"]
+        self.howareyou_question = ["Whats up","how are u", "naber"]
+        self.hallihallo = ["hi","hello"]
+        self.quote_sozler = ["quotes","özlü sözler","özlü söz", "günün sözü", "damla damlat bir söz"]
+        self.game = ["lol", "apex", "cs ", "cs go"]
+        self.sevgi = [" ...oyundan önce biraz aşk?","de beni önce bi aşıla","ama önce meme pompa?"]
         self.deniz_orospu = ["denize açıl", "sea of thieves"]
      
     @commands.Cog.listener()
@@ -38,21 +41,21 @@ class onMessageEvents(commands.Cog,name="onMessageEvents"):
         if(isinstance(message.channel,TextChannel)):
             #if user is bot 
             if message.author.bot: 
-                if message.author.id == 184405311681986560: #FredBot
+                if message.author.id == 184405311681986560: #FredBot / that's a music bot.
                     print(fredBotPlayer(message.content))
                 return False  
             #Whats up ???!!!
-            if any(word in message.content for word in self.nasilsin_icerik) and any(word in message.content for word in self.damla_nikname):
+            if any(word in message.content for word in self.howareyou_question) and any(word in message.content for word in self.damla_nikname):
                 data = nasilsin_veri_cek()
                 i = rd.randrange(0, len(data))
                 await message.channel.send(data[i - 1][1])
                 return
             #Hello
-            if any(word in message.content for word in self.merhabalar) and any(word in message.content for word in self.damla_nikname):
-                await message.channel.send("Merhaba Tatlım")
+            if any(word in message.content for word in self.hallihallo) and any(word in message.content for word in self.damla_nikname):
+                await message.channel.send("Hello my Sweetheart")
                 return
             #profanity $$$$$    
-            if any(word in message.content for word in self.kufur_icerik):
+            if any(word in message.content for word in self.blasphemous_content):
                 if message.author.name == "Timo":
                     await message.channel.send("Fuck u Timo")
                     return
@@ -61,11 +64,11 @@ class onMessageEvents(commands.Cog,name="onMessageEvents"):
                     await message.channel.send(yazi)
                     return
             #word of the day
-            if any(word in message.content for word in self.ozlu_sozler):
+            if any(word in message.content for word in self.quote_sozler):
                 await message.channel.send(get_quote())
                 return
             #gameblabla...
-            if any(word in message.content for word in self.oyunlar):
+            if any(word in message.content for word in self.game):
                 answer = "Geldim{}".format(random.choice(self.sevgi))
                 await message.channel.send(answer)
                 return
@@ -76,7 +79,7 @@ class onMessageEvents(commands.Cog,name="onMessageEvents"):
             #-----Otoma. Role Giving ------    
             ##if someone write !play in the wrong place##
             if "!play" in message.content or "?play" in message.content or "+play" in message.content:
-                if message.channel.id == 572300000000000657 or message.channel.id == 9610000000894:          
+                if message.channel.id == 572300000000000657 or message.channel.id == 96100000000000894:          
                     return #written in right place
                 else:
                     dwarfs_server_object = discord.utils.get(self.client.guilds, id = 548000000000655)
@@ -84,7 +87,7 @@ class onMessageEvents(commands.Cog,name="onMessageEvents"):
 
                     await message.channel.send("U got caught idiot!")
                     await message.author.send("I just wanted to remind you that you are stupid.")
-                    await message.author.send("https://fredboat.com/music-player/5480000000000655")
+                    await message.author.send("https://fredboat.com/music-player/5480000000000655") #5480000000000655 should be the server id
                                         
                     await message.author.add_roles(role)  
             #--------IMDB veri işleme-----------------
@@ -111,8 +114,7 @@ class onMessageEvents(commands.Cog,name="onMessageEvents"):
                                     colour=discord.Colour.red())
 
                 embed.set_image(url=data[3])
-                #embed.add_field(name="Toplam Film Sayısı:", value=str(film_sayisi),inline=True)
-                embed.set_footer(text="Film'i ekleyen şahsiyet:" + str(user))
+                embed.set_footer(text="Movie added by: " + str(user))
 
                 await message.channel.send(embed=embed)
                 return
@@ -140,13 +142,12 @@ class onMessageEvents(commands.Cog,name="onMessageEvents"):
             if message.content in self.damla_nikname:
                 embed = discord.Embed(
                     title="Merhaba benim adım Damla ",
-                    url="https://www.pornhub.com",
                     description="Romanya'nın Moldova Nouă kasabasında hayat buldum. Hayatta kalabilmek için hayat kadını mesleğini öğrendim. İlk başlarda çok zorlandım fakat zamanla genişledim. ",
                     colour=discord.Colour.red())
       
                 embed.set_thumbnail(url="https://media.istockphoto.com/photos/picture-of-a-sad-pet-ass-picture-id822753276")               
 
-                embed.add_field(name="Damla Film",
+                embed.add_field(name="Damla Movie",
                                 value="Eklenen filmlerden bir tanesi listelenir, bok da çıkabilir",
                                 inline=True)  
                 embed.add_field(name="Film eklemek için",
@@ -155,7 +156,6 @@ class onMessageEvents(commands.Cog,name="onMessageEvents"):
                 embed.add_field(name="CFG",
                                 value="Kayıtlı tüm CFG dosyaları listelenecek ",
                                 inline=True)
-
                 embed.add_field(name="!Damla ekle @username 1",
                                 value="Bir Damla ısmarla",
                                 inline=True)
@@ -164,32 +164,62 @@ class onMessageEvents(commands.Cog,name="onMessageEvents"):
                                 inline=True)               
                 embed.add_field(name="!Random",
                                 value="Rastegele takım oluştur",
-                                inline=True) 
-              
+                                inline=True)               
                 embed.add_field(name="özlü sözler",
                                 value="Bu günün özlü sözü",
                                 inline=True)     
                  
 
                 msg = await message.channel.send(embed=embed)
-                await asyncio.sleep(0.8)
-                embed.set_thumbnail(url="https://id.metu.edu.tr/wp-content/uploads/2019/04/Layer-21.png")  
+                await asyncio.sleep(1)
+                embed.set_thumbnail(url="https://ichef.bbci.co.uk/news/640/cpsprodpb/10189/production/_100092956_gettyimages-862701736.jpg")  
                 await msg.edit(embed=embed)                
                 return
-               
-            
+                           
         if(isinstance( message.channel,DMChannel)):
-            if message.content == "help":  
-                await message.channel.send("just fuck of")      
-                return
+            if message.author.bot: 
+                return False                          
+          
+class onMemberUpdate(commands.Cog,name="onMemberUpdate"):
+    def __init__(self, client:commands.Bot):
+        self.client = client  
+    
+    @commands.Cog.listener()
+    async def on_voice_state_update(self,member,before,after):
+        MemberId = member.id
+        MemberName = member.name
 
-            if "fredbot" in message.content:
-                await message.channel.send("https://fredboat.com/music-player/500000000000055")
-                return
+        con = sql.connect("app/data/database.db")
+        cursor = con.cursor()       
+        cursor.execute("CREATE TABLE IF NOT EXISTS connectionCounter(memberName TEXT,memberId TEXT,time TEXT,creatingData TEXT)");con.commit()
         
+      
+        if before.channel == None and after.channel != None:
+            #moved in    
+            MemberInRoom[member.id] = int(time.time())
+        
+        elif before.channel != None and after.channel == None:
+            #has leaved
+            try:
+                newCounts = int(time.time()) - int(MemberInRoom[member.id])
 
+                cursor.execute("SELECT * FROM connectionCounter WHERE MemberId = ?",(member.id,))
+                timeCounter = cursor.fetchall()
 
+                oldCounts = int(timeCounter[0][2])
+                result = oldCounts + newCounts
 
-   
+                if len(timeCounter) == 0:
+                    cursor.execute("INSERT INTO connectionCounter VALUES (?,?,?,?)",(str(member.name),str(member.id),str(result),str(date.today())));con.commit()
+                else:
+                    cursor.execute("UPDATE connectionCounter SET time = ? WHERE memberId = ?",(str(result),str(member.id)));con.commit()
+
+            except:
+                pass
+            finally:
+                MemberInRoom[member.id] = ""
+            
+        return
+        
 
 

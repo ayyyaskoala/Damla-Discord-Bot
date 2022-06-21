@@ -84,7 +84,7 @@ def nasilsin_veri_cek():
   cursor.execute('SELECT * FROM nasilsin')
   data = cursor.fetchall()
   return data
-#------Borsalar-*----------- this doesn't work anymore :/
+#------Borsalar-*----------- that doesn't work anymore :/
 def borsa():
   class crypto():
     def __init__(self,symbol,volume,high,low,bid):
@@ -235,6 +235,47 @@ def randomUser(memberList):
 
     return embed
 
+
+#Yemek-Kalori-Toplama
+def SQLyemekVeriler(data):
+    con = sqlite3.connect("app/data/database.db")
+    cursor = con.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS yemekVerileri(userNAME TEXT, yemek_adi TEXT, kalori TEXT, protein TEXT, karbonhidrat TEXT, yag TEXT,tarih TEXT)")
+    cursor.execute("INSERT INTO yemekVerileri VALUES(?,?,?,?,?,?,?)",data);con.commit()
+def SQLkaloriToplami(data):
+    con = sqlite3.connect("app/data/database.db")
+    cursor = con.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS kaloriToplami(userNAME TEXT,userID TEXT,ogun_adi TEXT, kalori TEXT, protein TEXT, karbonhidrat TEXT, yag TEXT, yenilen_text Text,tarih TEXT)")
+    cursor.execute("INSERT INTO kaloriToplami VALUES(?,?,?,?,?,?,?,?,?)",data);con.commit()
+def SQLyemekSorgusu(data):
+    con = sqlite3.connect("app/data/database.db")
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM yemekVerileri WHERE yemek_adi = ? ",(data,))
+    SQLFetch = cursor.fetchall()
+    return SQLFetch
+def checkFloat(data):
+  try:
+    if "," in data:
+      return float(data.replace(",","."))
+    else:
+      return float(data)
+  except:
+    return -1
+
+#Yemek-Kalori-Hesaplama
+def kaloriVerileriTopla():
+    con = sqlite3.connect("app/data/database.db")
+    cursor = con.cursor()
+
+    cursor.execute("SELECT * FROM kaloriToplami")
+    return cursor.fetchall()
+def OranHesaplama(protein,karbonhidrat,yag):
+    toplam = protein + karbonhidrat + yag
+    proteinOran = round((protein / toplam) * 100)
+    karbonhidratOran = round((karbonhidrat / toplam) * 100)
+    yagOran = round((yag / toplam) * 100)
+
+    return (proteinOran,karbonhidratOran,yagOran)
 
 
 
